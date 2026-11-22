@@ -449,6 +449,10 @@ const t = k => T[lang][k] ?? T.en[k] ?? k;
 function applyLang(){
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => el.innerHTML = t(el.dataset.i18n));
+  if (lang === 'tr') document.querySelectorAll('.h2, .hero h1, .drawer a:not(.btn)').forEach(el => {
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) n.nodeValue = n.nodeValue.toLocaleUpperCase('tr-TR');
+  });
   document.querySelectorAll('[data-open]').forEach(el => el.dataset.open = t('open'));
   document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
 }
