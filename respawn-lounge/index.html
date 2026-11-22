@@ -675,7 +675,7 @@ const layout = {
 };
 const rate = {PC:4, PS:5, Rig:8};
 let selected = null, hours = 2;
-const fmt = m => m >= 60 ? `${Math.floor(m/60)}h ${m%60 ? (m%60)+'m' : ''}`.trim() : `${m}m`;
+const fmt = m => { const H = lang==='tr'?' sa':'h', M = lang==='tr'?' dk':'m'; return m >= 60 ? `${Math.floor(m/60)}${H} ${m%60 ? (m%60)+M : ''}`.trim() : `${m}${M}`; };
 function renderBoard(){
   let free = 0;
   for (const [id,z] of Object.entries(layout)){
@@ -702,7 +702,7 @@ function renderBoard(){
 function updatePick(){
   const p = document.getElementById('pick-text');
   if (!selected){ p.textContent = t('board.tap'); return; }
-  p.innerHTML = `<b>${selected.name}</b> · ${hours}h · $${rate[selected.prefix]*hours}`;
+  p.innerHTML = `<b>${selected.name}</b> · ${hours}${lang==='tr'?' saat':'h'} · $${rate[selected.prefix]*hours}`;
 }
 document.querySelectorAll('.hours button').forEach(btn => btn.addEventListener('click', () => {
   hours = +btn.dataset.h;
