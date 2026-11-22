@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Respawn Lounge, gaming café</title>
+<meta name="description" content="PC, PS5 and racing simulator lounge. See free stations live, book by the hour, join weekly tournaments.">
+<meta property="og:title" content="Respawn Lounge, gaming café">
+<meta property="og:image" content="https://images.pexels.com/photos/9072216/pexels-photo-9072216.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F1433; --ink-2:#1A2050; --ink-3:#262D5C;
+  --cobalt:#2541F5; --cobalt-deep:#1A2FC4;
+  --token:#FFD23F; --gum:#FF6FB5; --mint:#3DDC97;
+  --paper:#F4F6FF; --line:#E2E6FF; --white:#fff; --muted:#4A5180;
+  --display:"Archivo Black","Arial Black",sans-serif;
+  --body:"DM Sans",system-ui,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{overflow-x:hidden;font-family:var(--body);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--token);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 16px var(--body);border:0;border-radius:999px;padding:14px 24px;cursor:pointer;text-decoration:none;transition:transform .15s var(--ease),background .15s}
+.btn:active{transform:scale(.97)}
+.btn-token{background:var(--token);color:var(--ink)}
+.btn-token:hover{background:#ffdd6b}
+.btn-line{background:transparent;color:var(--white);box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.btn-line:hover{box-shadow:inset 0 0 0 2px #fff;background:rgba(255,255,255,.08)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:var(--ink-2)}
+
+/* NAV */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .25s,box-shadow .25s;color:#fff}
+.nav.solid{background:rgba(15,20,51,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(255,255,255,.08)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.logo{font-family:var(--display);font-size:21px;text-decoration:none;display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo i{width:32px;height:32px;border-radius:10px;background:var(--token);display:grid;place-items:center;font-style:normal;color:var(--ink);font-size:16px;transform:rotate(-8deg)}
+.links{display:flex;gap:26px;list-style:none;font-weight:500}
+.links a{text-decoration:none;opacity:.8;padding:6px 0;border-bottom:2px solid transparent}
+.links a:hover,.links a.on{opacity:1;border-color:var(--token)}
+.lang{display:flex;background:rgba(255,255,255,.12);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;border-radius:999px;padding:6px 11px;font-weight:700;font-size:13px;cursor:pointer;color:#fff}
+.lang button[aria-pressed=true]{background:#fff;color:var(--ink)}
+.burger{display:none;width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.12);cursor:pointer;place-items:center}
+.burger span{display:block;width:20px;height:2px;background:#fff;position:relative;transition:.2s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:20px;height:2px;background:#fff;transition:.2s}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.burger[aria-expanded=true] span{background:transparent}
+.burger[aria-expanded=true] span::before{top:0;transform:rotate(45deg)}
+.burger[aria-expanded=true] span::after{top:0;transform:rotate(-45deg)}
+.drawer{position:fixed;inset:76px 0 0;background:var(--ink);z-index:49;padding:24px 20px;display:flex;flex-direction:column;gap:6px;transform:translateY(-8px);opacity:0;visibility:hidden;transition:.25s var(--ease)}
+.drawer.open{transform:none;opacity:1;visibility:visible}
+.drawer a{color:#fff;text-decoration:none;font:400 28px var(--display);padding:12px 0;border-bottom:1px solid var(--ink-3)}
+.drawer .btn{margin-top:20px}
+
+/* HERO */
+.hero{position:relative;color:#fff;padding:140px 0 80px;min-height:100vh;display:flex;align-items:center;background:var(--ink)}
+.hero-bg{position:absolute;inset:0;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:zoom 14s var(--ease) forwards}
+@keyframes zoom{to{transform:scale(1)}}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(15,20,51,.96) 0%,rgba(15,20,51,.82) 42%,rgba(37,65,245,.45) 100%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 14px 7px 10px;font-size:14px;font-weight:500;margin-bottom:24px}
+.pill b{margin-right:4px;width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(61,220,151,.7);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 10px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+.hero h1{font-family:var(--display);font-size:clamp(42px,5.8vw,78px);line-height:1;letter-spacing:-.01em}
+.hero h1 span{display:block;opacity:0;transform:translateY(24px);animation:rise .8s var(--ease) forwards}
+.hero h1 span:nth-child(2){animation-delay:.12s}
+@keyframes rise{to{opacity:1;transform:none}}
+.hero .lead{margin:24px 0 32px;font-size:19px;max-width:31em;color:#d4d8f5}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+.facts{display:flex;gap:34px;margin-top:44px}
+.facts div{font-size:14px;color:#b9bee6}
+.facts b{display:block;font-family:var(--display);font-size:28px;font-weight:400;color:#fff}
+
+/* BOARD */
+.board{background:rgba(15,20,51,.88);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:24px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);opacity:0;transform:translateY(30px);animation:rise .9s .3s var(--ease) forwards}
+.board-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.board-head h2{font-family:var(--display);font-size:20px;font-weight:400}
+.legend{display:flex;gap:14px;font-size:13px;color:#b9bee6}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.legend .f::before{background:var(--mint)}.legend .b::before{background:var(--ink-3)}
+.zone{font-size:13px;color:#9aa0c8;margin:14px 0 8px;display:flex;justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.st{aspect-ratio:1.2;border-radius:12px;border:0;font:700 14px var(--body);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:transform .15s var(--ease),background .2s}
+.st small{font-weight:500;font-size:11px;opacity:.8}
+.st.free{background:var(--mint);color:var(--ink)}
+.st.free:hover{transform:translateY(-3px)}
+.st.busy{background:var(--ink-3);color:#8d93c0;cursor:not-allowed}
+.st.sel{background:var(--token);color:var(--ink);box-shadow:0 0 0 3px #fff;transform:translateY(-3px)}
+.pick{margin-top:18px;background:var(--ink-2);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pick p{font-size:15px;margin-right:auto}
+.pick p b{color:var(--token)}
+.hours{display:flex;gap:6px}
+.hours button{width:40px;height:40px;border-radius:10px;border:2px solid #39417a;background:transparent;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+.hours button[aria-pressed=true]{background:#fff;color:var(--ink);border-color:#fff}
+
+/* SECTIONS */
+section.s{padding:110px 0}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:44px}
+.h2{font-family:var(--display);font-size:clamp(34px,4.4vw,56px);line-height:1.02;letter-spacing:-.01em}
+.sub{font-size:18px;max-width:34em;color:var(--muted);margin-top:12px}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* OFFER STRIP */
+.strip{background:var(--token);overflow:hidden;white-space:nowrap;border-block:3px solid var(--ink)}
+.strip-track{display:inline-flex;gap:48px;padding:16px 0;animation:marquee 30s linear infinite;font:400 20px var(--display)}
+.strip-track span::after{content:"✦";margin-left:48px;color:var(--gum)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ZONES (photo cards) */
+.zones{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:18px}
+.zcard{position:relative;border-radius:24px;overflow:hidden;min-height:420px;color:#fff;display:flex;align-items:flex-end;background:var(--ink-2)}
+.zcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.zcard:hover img{transform:scale(1.05)}
+.zcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,20,51,0) 35%,rgba(15,20,51,.92))}
+.zcard div{position:relative;z-index:1;padding:28px}
+.zcard h3{font:400 28px var(--display)}
+.zcard p{color:#d4d8f5;font-size:15px;max-width:22em}
+
+/* PRICES */
+.prices-wrap{background:var(--white)}
+.toggle{display:inline-flex;background:var(--paper);border-radius:999px;padding:5px;border:2px solid var(--line)}
+.toggle button{border:0;background:transparent;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer}
+.toggle button[aria-pressed=true]{background:var(--ink);color:#fff}
+.prices{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.price{background:var(--paper);border-radius:24px;padding:30px 26px;border:2px solid var(--line);display:flex;flex-direction:column}
+.price.hot{background:var(--gum);border-color:var(--gum)}
+.price h3{font-size:18px;margin-bottom:16px}
+.amt{font-family:var(--display);font-size:52px;line-height:1;transition:opacity .2s}
+.amt small{font:500 16px var(--body)}
+.price ul{list-style:none;margin:20px 0 26px;font-size:15px;display:grid;gap:9px}
+.price li{display:flex;gap:10px}
+.price li::before{content:"";width:18px;height:18px;flex:none;border-radius:50%;margin-top:2px;background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.price .btn{margin-top:auto}
+
+/* GAMES */
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.game{background:#fff;border-radius:16px;padding:16px 18px;border:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;transition:opacity .25s,transform .25s}
+.game b{font-weight:700}
+.game span{font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--paper);color:var(--muted);white-space:nowrap}
+.game.hide{display:none}
+.game.top{border-color:var(--token);background:#fffbea}
+
+/* TOURNAMENTS */
+.tour{background:var(--ink);color:#fff}
+.tour .sub{color:#b9bee6}
+.tgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:stretch}
+.next{position:relative;border-radius:28px;overflow:hidden;min-height:460px;display:flex;align-items:flex-end;background:var(--ink-2)}
+.next img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.next::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,20,51,.1),rgba(15,20,51,.95) 75%)}
+.next-in{position:relative;z-index:1;padding:32px;width:100%}
+.next-in h3{font:400 34px var(--display);margin:6px 0 18px}
+.badge{display:inline-block;background:var(--gum);color:var(--ink);font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.count div{background:rgba(255,255,255,.1);border-radius:14px;padding:12px 6px;text-align:center;font-size:12px;color:#b9bee6}
+.count b{display:block;font:400 30px var(--display);color:#fff;font-variant-numeric:tabular-nums}
+.events{display:grid;gap:12px;align-content:start}
+.event{display:grid;grid-template-columns:76px 1fr auto;gap:18px;align-items:center;background:var(--ink-2);border-radius:20px;padding:18px 22px;border:1px solid var(--ink-3)}
+.date{font-family:var(--display);text-align:center;line-height:1}
+.date b{display:block;font-size:34px;font-weight:400;color:var(--token)}
+.date small{font:700 13px var(--body);color:#b9bee6}
+.event h4{font-size:18px}
+.event p{color:#9aa0c8;font-size:14px}
+.event .prize{font-weight:700;background:var(--ink-3);padding:7px 12px;border-radius:10px;white-space:nowrap;font-size:14px}
+
+/* GALLERY */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:12px}
+.gallery button{border:0;padding:0;border-radius:18px;overflow:hidden;cursor:zoom-in;background:var(--ink-2);position:relative}
+.gallery button:nth-child(1){grid-column:span 2;grid-row:span 2}
+.gallery button:nth-child(4),.gallery button:nth-child(5),.gallery button:nth-child(6){grid-column:span 2}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.gallery button:hover img{transform:scale(1.06)}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(1100px,94vw);margin:auto}
+.lightbox::backdrop{background:rgba(10,13,35,.9)}
+.lightbox img{max-height:84vh;width:auto;border-radius:16px}
+.lb-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--ink);font-size:22px;cursor:pointer}
+
+/* FAQ */
+.faq{display:grid;grid-template-columns:1fr 1.4fr;gap:56px}
+details{background:#fff;border-radius:18px;border:2px solid var(--line);margin-bottom:12px}
+summary{list-style:none;cursor:pointer;padding:20px 24px;font-weight:700;font-size:18px;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:400 26px/1 var(--display);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 24px 22px;color:var(--muted)}
+
+/* VISIT */
+.visit{background:var(--cobalt);color:#fff}
+.visit .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.visit .sub{color:#d4d8f5}
+.info{display:grid;gap:16px;margin:30px 0}
+.info div{display:grid;grid-template-columns:96px 1fr;gap:12px}
+.info dt{color:var(--token);font-weight:700}
+.map{border-radius:26px;aspect-ratio:4/3;background:var(--ink-2);overflow:hidden;box-shadow:0 0 0 6px var(--cobalt-deep)}
+.map svg{width:100%;height:100%}
+
+/* MODAL */
+.modal{border:0;border-radius:26px;padding:0;width:min(520px,94vw);margin:auto;color:var(--ink)}
+.modal::backdrop{background:rgba(10,13,35,.75);backdrop-filter:blur(3px)}
+.modal[open]{animation:pop .3s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}}
+.modal form{padding:30px;display:grid;gap:16px}
+.modal h3{font:400 28px var(--display)}
+.modal label{display:grid;gap:6px;font-weight:700;font-size:14px}
+.modal input,.modal select{font:400 16px var(--body);padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.modal input:focus,.modal select:focus{outline:none;border-color:var(--cobalt)}
+.modal .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal .err{color:#c0204f;font-size:14px;font-weight:500;min-height:1em}
+.modal .x{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;border:0;background:var(--paper);font-size:20px;cursor:pointer}
+.done{padding:40px 30px;text-align:center;display:none}
+.done.show{display:block}
+.done .tick{width:72px;height:72px;border-radius:50%;background:var(--mint);margin:0 auto 18px;display:grid;place-items:center;font-size:36px}
+.done h3{font:400 28px var(--display);margin-bottom:8px}
+.done p{color:var(--muted);margin-bottom:22px}
+
+footer{background:var(--ink);color:#8d93c0;padding:30px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:1020px){
+  .links,.nav .lang,.nav .btn{display:none}
+  .burger{display:grid}
+  .hero .wrap,.tgrid,.faq,.visit .wrap{grid-template-columns:minmax(0,1fr)}
+  .hero{min-height:auto}
+  .zones{grid-template-columns:1fr 1fr}
+  .zcard:first-child{grid-column:1/-1}
+  .prices{grid-template-columns:1fr 1fr}
+  .gallery{grid-template-columns:1fr 1fr;grid-auto-rows:180px}
+  .gallery button:nth-child(5),.gallery button:nth-child(6){grid-column:span 1}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  section.s{padding:76px 0}
+  .hero{padding:110px 0 56px}
+  .facts{gap:22px}
+  .board{padding:16px;border-radius:22px}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .pick .btn{width:100%}
+  .zones,.prices{grid-template-columns:1fr}
+  .zcard{min-height:320px}
+  .event{grid-template-columns:60px 1fr;padding:16px}
+  .event .prize{grid-column:2;justify-self:start}
+  .modal .row{grid-template-columns:1fr}
+  .gallery button:nth-child(4){grid-column:span 1}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero h1 span,.board,.reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><i>R</i>Respawn</a>
+    <nav aria-label="Main"><ul class="links">
+      <li><a href="#zones" data-i18n="nav.zones">Zones</a></li>
+      <li><a href="#prices" data-i18n="nav.prices">Prices</a></li>
+      <li><a href="#games" data-i18n="nav.games">Games</a></li>
+      <li><a href="#tournaments" data-i18n="nav.tour">Tournaments</a></li>
+      <li><a href="#visit" data-i18n="nav.visit">Visit</a></li>
+    </ul></nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+    </div>
+    <button class="btn btn-token" type="button" data-book data-i18n="cta.book">Book a station</button>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Menu"><span></span></button>
+  </div>
+</header>
+<div class="drawer" id="drawer">
+  <a href="#zones" data-i18n="nav.zones">Zones</a>
+  <a href="#prices" data-i18n="nav.prices">Prices</a>
+  <a href="#games" data-i18n="nav.games">Games</a>
+  <a href="#tournaments" data-i18n="nav.tour">Tournaments</a>
+  <a href="#visit" data-i18n="nav.visit">Visit</a>
+  <div class="lang" role="group" aria-label="Language" style="align-self:flex-start;margin-top:18px">
+    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+  </div>
+  <button class="btn btn-token" type="button" data-book data-i18n="cta.book">Book a station</button>
+</div>
+
+<main id="top">
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-bg"><img src="https://images.pexels.com/photos/9072216/pexels-photo-9072216.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="" fetchpriority="high"></div>
+  <div class="wrap">
+    <div>
+      <span class="pill"><b></b><span id="free-count">14</span><span data-i18n="hero.pill">stations free right now</span></span>
+      <h1 id="hero-title"><span data-i18n="hero.t1">Your seat is warm.</span><span data-i18n="hero.t2">Your controller is charged.</span></h1>
+      <p class="lead" data-i18n="hero.lead">High-refresh PCs, PS5s on big screens and a racing rig that shakes the floor. Pick a free station, choose your hours and it's ready when you walk in.</p>
+      <div class="cta">
+        <a class="btn btn-token" href="#board" data-i18n="hero.see">See free stations</a>
+        <a class="btn btn-line" href="#prices" data-i18n="hero.prices">View prices</a>
+      </div>
+      <div class="facts">
+        <div><b>24</b><span data-i18n="hero.f1">stations</span></div>
+        <div><b>240 Hz</b><span data-i18n="hero.f2">monitors</span></div>
+        <div><b>03:00</b><span data-i18n="hero.f3">weekend closing</span></div>
+      </div>
+    </div>
+
+    <div class="board" id="board">
+      <div class="board-head">
+        <h2 data-i18n="board.title">Right now</h2>
+        <div class="legend"><span class="f" data-i18n="board.free">Free</span><span class="b" data-i18n="board.busy">In use</span></div>
+      </div>
+      <div class="zone"><span data-i18n="board.pc">PC zone</span><span>RTX 4070</span></div>
+      <div class="grid" id="pc"></div>
+      <div class="zone"><span data-i18n="board.ps">PS5 couches</span><span>65" 4K</span></div>
+      <div class="grid" id="ps"></div>
+      <div class="zone"><span data-i18n="board.sim">Racing rigs</span><span>Direct drive</span></div>
+      <div class="grid" id="sim"></div>
+      <div class="pick" aria-live="polite">
+        <p id="pick-text"></p>
+        <div class="hours" role="group" aria-label="Hours">
+          <button type="button" data-h="1" aria-pressed="false">1h</button>
+          <button type="button" data-h="2" aria-pressed="true">2h</button>
+          <button type="button" data-h="3" aria-pressed="false">3h</button>
+        </div>
+        <button class="btn btn-token" type="button" data-book data-i18n="cta.book">Book a station</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true"><div class="strip-track">
+  <span data-i18n="strip.1">Happy hour 12:00–16:00, every PC $3</span><span data-i18n="strip.2">Night pass Fri & Sat, 5 hours for $18</span><span data-i18n="strip.3">Students get 20% off with ID</span><span data-i18n="strip.4">Bring 4 friends, the 5th plays free</span>
+  <span data-i18n="strip.1">Happy hour 12:00–16:00, every PC $3</span><span data-i18n="strip.2">Night pass Fri & Sat, 5 hours for $18</span><span data-i18n="strip.3">Students get 20% off with ID</span><span data-i18n="strip.4">Bring 4 friends, the 5th plays free</span>
+</div></div>
+
+<section class="s" id="zones" aria-labelledby="zones-title">
+  <div class="wrap">
+    <div class="head reveal">
+      <div><h2 class="h2" id="zones-title" data-i18n="zones.title">Three ways to play</h2>
+      <p class="sub" data-i18n="zones.sub">Every station has a headset, a fresh mouse pad and a power outlet for your phone.</p></div>
+    </div>
+    <div class="zones">
+      <article class="zcard reveal">
+        <img src="https://images.pexels.com/photos/7915232/pexels-photo-7915232.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Friends playing on gaming PCs in a row" loading="lazy">
+        <div><h3 data-i18n="zones.pc">PC arena</h3><p data-i18n="zones.pcd">12 identical machines so nobody blames the hardware. Your Steam, Riot and Epic accounts work as usual.</p></div>
+      </article>
+      <article class="zcard reveal">
+        <img src="https://images.pexels.com/photos/7776158/pexels-photo-7776158.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Three friends laughing on a couch with controllers" loading="lazy">
+        <div><h3 data-i18n="zones.ps">PS5 couches</h3><p data-i18n="zones.psd">Up to four players per screen, snacks within reach.</p></div>
+      </article>
+      <article class="zcard reveal">
+        <img src="https://images.pexels.com/photos/28993114/pexels-photo-28993114.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Row of racing simulator seats with wheels" loading="lazy">
+        <div><h3 data-i18n="zones.sim">Racing rigs</h3><p data-i18n="zones.simd">Motion seats, pedals with real resistance and lap times on the wall.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="s prices-wrap" id="prices" aria-labelledby="prices-title">
+  <div class="wrap">
+    <div class="head reveal">
+      <div><h2 class="h2" id="prices-title" data-i18n="prices.title">Pay by the hour</h2>
+      <p class="sub" data-i18n="prices.sub">No membership, no deposit. Your time starts when you sit down and you can extend from your seat.</p></div>
+      <div class="toggle" role="group" aria-label="Day">
+        <button type="button" data-day="wd" aria-pressed="true" data-i18n="prices.wd">Weekdays</button>
+        <button type="button" data-day="we" aria-pressed="false" data-i18n="prices.we">Weekends</button>
+      </div>
+    </div>
+    <div class="prices">
+      <article class="price reveal">
+        <h3 data-i18n="prices.pc">Gaming PC</h3>
+        <div class="amt" data-wd="4" data-we="5">$4<small data-i18n="prices.hr"> / hour</small></div>
+        <ul><li data-i18n="prices.pc1">RTX 4070, 240 Hz</li><li data-i18n="prices.pc2">Mechanical keyboard</li><li data-i18n="prices.pc3">Your own game library</li></ul>
+        <button class="btn btn-ink" type="button" data-book data-zone="PC" data-i18n="prices.pick">Book this</button>
+      </article>
+      <article class="price reveal">
+        <h3 data-i18n="prices.ps">PS5 couch</h3>
+        <div class="amt" data-wd="5" data-we="6">$5<small data-i18n="prices.hr"> / hour</small></div>
+        <ul><li data-i18n="prices.ps1">65" 4K screen</li><li data-i18n="prices.ps2">Up to 4 players</li><li data-i18n="prices.ps3">30+ games installed</li></ul>
+        <button class="btn btn-ink" type="button" data-book data-zone="PS" data-i18n="prices.pick">Book this</button>
+      </article>
+      <article class="price reveal">
+        <h3 data-i18n="prices.sim">Racing rig</h3>
+        <div class="amt" data-wd="8" data-we="9">$8<small data-i18n="prices.hr"> / hour</small></div>
+        <ul><li data-i18n="prices.sim1">Direct-drive wheel</li><li data-i18n="prices.sim2">Motion seat</li><li data-i18n="prices.sim3">Lap leaderboard</li></ul>
+        <button class="btn btn-ink" type="button" data-book data-zone="Rig" data-i18n="prices.pick">Book this</button>
+      </article>
+      <article class="price hot reveal">
+        <h3 data-i18n="prices.night">Night pass</h3>
+        <div class="amt" data-wd="15" data-we="18">$15<small data-i18n="prices.night_u"> / night</small></div>
+        <ul><li data-i18n="prices.n1">Any PC, 22:00 to 03:00</li><li data-i18n="prices.n2">One drink included</li><li data-i18n="prices.n3">Snack bar open all night</li></ul>
+        <button class="btn btn-ink" type="button" data-book data-zone="PC" data-i18n="prices.pick">Book this</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="games" aria-labelledby="games-title">
+  <div class="wrap">
+    <div class="head reveal">
+      <div><h2 class="h2" id="games-title" data-i18n="games.title">Already installed</h2>
+      <p class="sub" data-i18n="games.sub">Highlighted titles are the most played this month. Ask at the bar if something is missing.</p></div>
+      <div class="filters" role="group" aria-label="Platform">
+        <button type="button" data-f="all" aria-pressed="true" data-i18n="games.all">All</button>
+        <button type="button" data-f="pc" aria-pressed="false">PC</button>
+        <button type="button" data-f="ps" aria-pressed="false">PS5</button>
+        <button type="button" data-f="sim" aria-pressed="false" data-i18n="games.racing">Racing</button>
+      </div>
+    </div>
+    <div class="games" id="game-list"></div>
+  </div>
+</section>
+
+<section class="s tour" id="tournaments" aria-labelledby="t-title">
+  <div class="wrap">
+    <div class="head reveal">
+      <div><h2 class="h2" id="t-title" data-i18n="tour.title">Tournaments</h2>
+      <p class="sub" data-i18n="tour.sub">Sign up online or at the counter. Spectators are always welcome and the bar stays open.</p></div>
+    </div>
+    <div class="tgrid">
+      <article class="next reveal">
+        <img src="https://images.pexels.com/photos/7915312/pexels-photo-7915312.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Player celebrating in a dim esports arena" loading="lazy">
+        <div class="next-in">
+          <span class="badge" data-i18n="tour.next">Next up</span>
+          <h3>EA FC 1v1 Cup</h3>
+          <div class="count" id="count" aria-live="off">
+            <div><b data-c="d">00</b><span data-i18n="tour.d">days</span></div>
+            <div><b data-c="h">00</b><span data-i18n="tour.h">hours</span></div>
+            <div><b data-c="m">00</b><span data-i18n="tour.m">min</span></div>
+            <div><b data-c="s">00</b><span data-i18n="tour.s">sec</span></div>
+          </div>
+          <button class="btn btn-token" type="button" data-signup="EA FC 1v1 Cup" data-i18n="tour.join">Join the tournament</button>
+        </div>
+      </article>
+      <div class="events">
+        <article class="event reveal"><div class="date"><b data-ev="0">06</b><small data-evm="0">Dec</small></div><div><h4>EA FC 1v1 Cup</h4><p data-i18n="tour.e1">32 players, knockout, 20:00</p></div><span class="prize">$150</span></article>
+        <article class="event reveal"><div class="date"><b data-ev="1">13</b><small data-evm="1">Dec</small></div><div><h4>Valorant 5v5 Night</h4><p data-i18n="tour.e2">8 teams, best of three finals</p></div><span class="prize">$300</span></article>
+        <article class="event reveal"><div class="date"><b data-ev="2">21</b><small data-evm="2">Dec</small></div><div><h4 data-i18n="tour.e3t">Fastest Lap Challenge</h4><p data-i18n="tour.e3">Open all day on the racing rigs</p></div><span class="prize" data-i18n="tour.e3p">Free month</span></article>
+        <article class="event reveal"><div class="date"><b data-ev="3">28</b><small data-evm="3">Dec</small></div><div><h4>Tekken 8 Open</h4><p data-i18n="tour.e4">Double elimination, bring your own stick</p></div><span class="prize">$200</span></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="gallery" aria-labelledby="g-title">
+  <div class="wrap">
+    <div class="head reveal"><div><h2 class="h2" id="g-title" data-i18n="gal.title">Inside the lounge</h2><p class="sub" data-i18n="gal.sub">Tap a photo to see it larger.</p></div></div>
+    <div class="gallery reveal" id="gal">
+      <button type="button"><img src="https://images.pexels.com/photos/9072216/pexels-photo-9072216.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Gaming PCs lit in red and blue" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/7915235/pexels-photo-7915235.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Players on mechanical keyboards" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/33350512/pexels-photo-33350512.jpeg?auto=compress&cs=tinysrgb&w=700" alt="PS5 controller close up" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/28993114/pexels-photo-28993114.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Racing simulators in a row" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/9787476/pexels-photo-9787476.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Racing pedals under blue light" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/7776158/pexels-photo-7776158.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Friends playing on a couch" loading="lazy"></button>
+    </div>
+  </div>
+</section>
+
+<section class="s prices-wrap" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq">
+    <div class="reveal"><h2 class="h2" id="faq-title" data-i18n="faq.title">Good to know</h2><p class="sub" data-i18n="faq.sub">Still have a question? Message us on WhatsApp, we usually reply within minutes.</p></div>
+    <div class="reveal">
+      <details><summary data-i18n="faq.q1">Can I bring my own keyboard or controller?</summary><p data-i18n="faq.a1">Yes. Every PC has free USB ports up front and the PS5s accept your own DualSense.</p></details>
+      <details><summary data-i18n="faq.q2">Is there an age limit?</summary><p data-i18n="faq.a2">Under 16s are welcome until 22:00. After that the lounge is 16+.</p></details>
+      <details><summary data-i18n="faq.q3">What if I'm late for my booking?</summary><p data-i18n="faq.a3">We hold your station for 15 minutes. After that it goes back on the board.</p></details>
+      <details><summary data-i18n="faq.q4">Do you host private parties?</summary><p data-i18n="faq.a4">Birthdays and team events from 6 people. Message us for a quote.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="s visit" id="visit" aria-labelledby="v-title">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="h2" id="v-title" data-i18n="visit.title">Come by</h2>
+      <p class="sub" data-i18n="visit.sub">Two minutes from the metro. Toasties, energy drinks and bubble tea at the bar.</p>
+      <dl class="info">
+        <div><dt data-i18n="visit.addr">Address</dt><dd>48 Arcade Street, Downtown</dd></div>
+        <div><dt data-i18n="visit.hours">Hours</dt><dd data-i18n="visit.hoursv">Mon–Thu 12:00–00:00<br>Fri–Sun 12:00–03:00</dd></div>
+        <div><dt data-i18n="visit.phone">Phone</dt><dd>+1 (555) 014-2290</dd></div>
+      </dl>
+      <button class="btn btn-token" type="button" data-book data-i18n="cta.book">Book a station</button>
+    </div>
+    <div class="map reveal" role="img" aria-label="Map: Respawn Lounge is one block south of the metro station">
+      <svg viewBox="0 0 400 300" aria-hidden="true">
+        <rect width="400" height="300" fill="#1A2050"/>
+        <g stroke="#262D5C" stroke-width="18" fill="none" stroke-linecap="round"><path d="M-10 90H410M-10 210H410M120-10V310M290-10V310"/></g>
+        <g stroke="#262D5C" stroke-width="7" fill="none"><path d="M-10 150H410M205-10V310"/></g>
+        <rect x="20" y="105" width="85" height="90" rx="10" fill="#1f4d3f"/>
+        <rect x="140" y="105" width="50" height="35" rx="6" fill="#222a5e"/><rect x="220" y="160" width="55" height="35" rx="6" fill="#222a5e"/>
+        <circle cx="290" cy="90" r="11" fill="#FF6FB5"/><text x="306" y="78" fill="#FF6FB5" font-family="DM Sans" font-size="12" font-weight="700">Metro</text>
+        <circle cx="205" cy="210" r="24" fill="#FFD23F" opacity=".25"><animate attributeName="r" values="14;28;14" dur="2.4s" repeatCount="indefinite"/></circle>
+        <circle cx="205" cy="210" r="12" fill="#FFD23F"/>
+        <text x="225" y="242" fill="#fff" font-family="DM Sans" font-size="14" font-weight="700">Respawn Lounge</text>
+      </svg>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Respawn Lounge · <span data-i18n="foot.photos">Photos from Pexels</span></span>
+    <span data-i18n="foot.demo">Concept site by MaaezhDev. Respawn Lounge is a fictional business.</span>
+  </div>
+</footer>
+
+<!-- Booking modal -->
+<dialog class="modal" id="book-modal" aria-labelledby="bm-title">
+  <button class="x" type="button" data-close aria-label="Close">×</button>
+  <form id="book-form" method="dialog" novalidate>
+    <h3 id="bm-title" data-i18n="bm.title">Book a station</h3>
+    <label><span data-i18n="bm.name">Your name</span><input name="name" autocomplete="name" required></label>
+    <div class="row">
+      <label><span data-i18n="bm.station">Station</span><select name="station" id="bm-station"></select></label>
+      <label><span data-i18n="bm.hours">Hours</span><select name="hours"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+    </div>
+    <div class="row">
+      <label><span data-i18n="bm.date">Date</span><input type="date" name="date" required></label>
+      <label><span data-i18n="bm.time">Start time</span><input type="time" name="time" value="18:00" required></label>
+    </div>
+    <label><span data-i18n="bm.phone">Phone</span><input name="phone" type="tel" autocomplete="tel" placeholder="+1 555 000 0000" required></label>
+    <p class="err" id="bm-err" role="alert"></p>
+    <button class="btn btn-ink" type="submit"><span data-i18n="bm.submit">Confirm booking</span>&nbsp;·&nbsp;<span id="bm-total">$8</span></button>
+  </form>
+  <div class="done" id="bm-done">
+    <div class="tick">✓</div>
+    <h3 data-i18n="bm.done">Station booked</h3>
+    <p id="bm-done-text"></p>
+    <button class="btn btn-ink" type="button" data-close data-i18n="bm.ok">Done</button>
+  </div>
+</dialog>
+
+<!-- Tournament signup -->
+<dialog class="modal" id="sign-modal" aria-labelledby="sm-title">
+  <button class="x" type="button" data-close aria-label="Close">×</button>
+  <form id="sign-form" method="dialog" novalidate>
+    <h3 id="sm-title"></h3>
+    <label><span data-i18n="sm.gamer">Gamer tag</span><input name="tag" required></label>
+    <label><span data-i18n="bm.phone">Phone</span><input name="phone" type="tel" required></label>
+    <p class="err" id="sm-err" role="alert"></p>
+    <button class="btn btn-ink" type="submit" data-i18n="sm.submit">Reserve my spot</button>
+  </form>
+  <div class="done" id="sm-done">
+    <div class="tick">✓</div>
+    <h3 data-i18n="sm.done">You're in</h3>
+    <p id="sm-done-text"></p>
+    <button class="btn btn-ink" type="button" data-close data-i18n="bm.ok">Done</button>
+  </div>
+</dialog>
+
+<dialog class="lightbox" id="lb"><button class="lb-close" type="button" data-close aria-label="Close">×</button><img id="lb-img" alt=""></dialog>
+
+<script>
+const T = {
+ en:{
+  "nav.zones":"Zones","nav.prices":"Prices","nav.games":"Games","nav.tour":"Tournaments","nav.visit":"Visit","cta.book":"Book a station",
+  "hero.pill":"stations free right now","hero.t1":"Your seat is warm.","hero.t2":"Your controller is charged.",
+  "hero.lead":"High-refresh PCs, PS5s on big screens and a racing rig that shakes the floor. Pick a free station, choose your hours and it's ready when you walk in.",
+  "hero.see":"See free stations","hero.prices":"View prices","hero.f1":"stations","hero.f2":"monitors","hero.f3":"weekend closing",
+  "board.title":"Right now","board.free":"Free","board.busy":"In use","board.pc":"PC zone","board.ps":"PS5 couches","board.sim":"Racing rigs",
+  "board.tap":"Tap a green station to pick it.","board.freein":"free in","board.freeword":"free",
+  "strip.1":"Happy hour 12:00–16:00, every PC $3","strip.2":"Night pass Fri & Sat, 5 hours for $18","strip.3":"Students get 20% off with ID","strip.4":"Bring 4 friends, the 5th plays free",
+  "zones.title":"Three ways to play","zones.sub":"Every station has a headset, a fresh mouse pad and a power outlet for your phone.",
+  "zones.pc":"PC arena","zones.pcd":"12 identical machines so nobody blames the hardware. Your Steam, Riot and Epic accounts work as usual.",
+  "zones.ps":"PS5 couches","zones.psd":"Up to four players per screen, snacks within reach.","zones.sim":"Racing rigs","zones.simd":"Motion seats, pedals with real resistance and lap times on the wall.",
+  "prices.title":"Pay by the hour","prices.sub":"No membership, no deposit. Your time starts when you sit down and you can extend from your seat.",
+  "prices.wd":"Weekdays","prices.we":"Weekends","prices.pc":"Gaming PC","prices.ps":"PS5 couch","prices.sim":"Racing rig","prices.night":"Night pass",
+  "prices.hr":" / hour","prices.night_u":" / night","prices.pick":"Book this",
+  "prices.pc1":"RTX 4070, 240 Hz","prices.pc2":"Mechanical keyboard","prices.pc3":"Your own game library","prices.ps1":"65\" 4K screen","prices.ps2":"Up to 4 players","prices.ps3":"30+ games installed",
+  "prices.sim1":"Direct-drive wheel","prices.sim2":"Motion seat","prices.sim3":"Lap leaderboard","prices.n1":"Any PC, 22:00 to 03:00","prices.n2":"One drink included","prices.n3":"Snack bar open all night",
+  "games.title":"Already installed","games.sub":"Highlighted titles are the most played this month. Ask at the bar if something is missing.","games.all":"All","games.racing":"Racing",
+  "tour.title":"Tournaments","tour.sub":"Sign up online or at the counter. Spectators are always welcome and the bar stays open.","tour.next":"Next up",
+  "tour.d":"days","tour.h":"hours","tour.m":"min","tour.s":"sec","tour.join":"Join the tournament",
+  "tour.e1":"32 players, knockout, 20:00","tour.e2":"8 teams, best of three finals","tour.e3t":"Fastest Lap Challenge","tour.e3":"Open all day on the racing rigs","tour.e3p":"Free month","tour.e4":"Double elimination, bring your own stick",
+  "gal.title":"Inside the lounge","gal.sub":"Tap a photo to see it larger.",
+  "faq.title":"Good to know","faq.sub":"Still have a question? Message us on WhatsApp, we usually reply within minutes.",
+  "faq.q1":"Can I bring my own keyboard or controller?","faq.a1":"Yes. Every PC has free USB ports up front and the PS5s accept your own DualSense.",
+  "faq.q2":"Is there an age limit?","faq.a2":"Under 16s are welcome until 22:00. After that the lounge is 16+.",
+  "faq.q3":"What if I'm late for my booking?","faq.a3":"We hold your station for 15 minutes. After that it goes back on the board.",
+  "faq.q4":"Do you host private parties?","faq.a4":"Birthdays and team events from 6 people. Message us for a quote.",
+  "visit.title":"Come by","visit.sub":"Two minutes from the metro. Toasties, energy drinks and bubble tea at the bar.","visit.addr":"Address","visit.hours":"Hours","visit.phone":"Phone",
+  "visit.hoursv":"Mon–Thu 12:00–00:00<br>Fri–Sun 12:00–03:00",
+  "foot.photos":"Photos from Pexels","foot.demo":"Concept site by MaaezhDev. Respawn Lounge is a fictional business.",
+  "bm.title":"Book a station","bm.name":"Your name","bm.station":"Station","bm.hours":"Hours","bm.date":"Date","bm.time":"Start time","bm.phone":"Phone","bm.submit":"Confirm booking",
+  "bm.done":"Station booked","bm.ok":"Done","bm.err":"Please fill in your name, date and phone so we can hold the station.",
+  "bm.summary":"{s} is yours on {d} at {t} for {h}h. We'll send a reminder to {p}.",
+  "sm.gamer":"Gamer tag","sm.submit":"Reserve my spot","sm.done":"You're in","sm.err":"Add your gamer tag and phone to reserve a spot.","sm.summary":"{n} is on the list for {e}. Check-in opens 30 minutes before start.",
+  "months":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+ },
+ tr:{
+  "nav.zones":"Alanlar","nav.prices":"Fiyatlar","nav.games":"Oyunlar","nav.tour":"Turnuvalar","nav.visit":"Ulaşım","cta.book":"Yer ayırt",
+  "hero.pill":"istasyon şu an boş","hero.t1":"Koltuğun hazır.","hero.t2":"Kolun şarjlı.",
+  "hero.lead":"Yüksek yenileme hızlı PC'ler, dev ekranlarda PS5'ler ve yeri sarsan bir yarış simülatörü. Boş bir istasyon seç, saatini belirle, geldiğinde hazır olsun.",
+  "hero.see":"Boş istasyonları gör","hero.prices":"Fiyatlara bak","hero.f1":"istasyon","hero.f2":"monitör","hero.f3":"hafta sonu kapanış",
+  "board.title":"Şu an","board.free":"Boş","board.busy":"Dolu","board.pc":"PC alanı","board.ps":"PS5 koltukları","board.sim":"Yarış simülatörleri",
+  "board.tap":"Seçmek için yeşil bir istasyona dokun.","board.freein":"boşalır:","board.freeword":"boş",
+  "strip.1":"Mutlu saat 12:00–16:00, tüm PC'ler $3","strip.2":"Cuma ve cumartesi gece paketi, 5 saat $18","strip.3":"Öğrencilere kimlikle %20 indirim","strip.4":"4 arkadaşını getir, 5. kişi bedava",
+  "zones.title":"Üç farklı oyun alanı","zones.sub":"Her istasyonda kulaklık, temiz mouse pad ve telefonun için priz var.",
+  "zones.pc":"PC arenası","zones.pcd":"12 aynı makine, kimse donanımı suçlayamaz. Steam, Riot ve Epic hesapların her zamanki gibi çalışır.",
+  "zones.ps":"PS5 koltukları","zones.psd":"Ekran başına 4 oyuncuya kadar, atıştırmalıklar elinin altında.","zones.sim":"Yarış simülatörleri","zones.simd":"Hareketli koltuk, gerçekçi pedallar ve duvarda tur süreleri.",
+  "prices.title":"Saatlik öde","prices.sub":"Üyelik yok, depozito yok. Süren oturduğunda başlar, istersen yerinden uzatırsın.",
+  "prices.wd":"Hafta içi","prices.we":"Hafta sonu","prices.pc":"Oyun PC'si","prices.ps":"PS5 koltuğu","prices.sim":"Yarış simülatörü","prices.night":"Gece paketi",
+  "prices.hr":" / saat","prices.night_u":" / gece","prices.pick":"Bunu ayırt",
+  "prices.pc1":"RTX 4070, 240 Hz","prices.pc2":"Mekanik klavye","prices.pc3":"Kendi oyun kütüphanen","prices.ps1":"65\" 4K ekran","prices.ps2":"4 oyuncuya kadar","prices.ps3":"30+ yüklü oyun",
+  "prices.sim1":"Direct-drive direksiyon","prices.sim2":"Hareketli koltuk","prices.sim3":"Tur sıralaması","prices.n1":"Tüm PC'ler, 22:00–03:00","prices.n2":"Bir içecek dahil","prices.n3":"Büfe gece boyu açık",
+  "games.title":"Yüklü oyunlar","games.sub":"Vurgulananlar bu ayın en çok oynananları. Aradığın oyun yoksa bara sor.","games.all":"Tümü","games.racing":"Yarış",
+  "tour.title":"Turnuvalar","tour.sub":"Online ya da kasadan kayıt ol. İzleyiciler her zaman davetli, bar açık.","tour.next":"Sıradaki",
+  "tour.d":"gün","tour.h":"saat","tour.m":"dk","tour.s":"sn","tour.join":"Turnuvaya katıl",
+  "tour.e1":"32 oyuncu, eleme usulü, 20:00","tour.e2":"8 takım, final üç maç üzerinden","tour.e3t":"En Hızlı Tur Yarışması","tour.e3":"Gün boyu yarış simülatörlerinde","tour.e3p":"1 ay bedava","tour.e4":"Çift eleme, kendi arcade kolunu getir",
+  "gal.title":"Salondan kareler","gal.sub":"Büyütmek için bir fotoğrafa dokun.",
+  "faq.title":"Bilmen gerekenler","faq.sub":"Başka sorun mu var? WhatsApp'tan yaz, genelde dakikalar içinde dönüyoruz.",
+  "faq.q1":"Kendi klavyemi veya kolumu getirebilir miyim?","faq.a1":"Evet. Her PC'nin önünde boş USB girişleri var, PS5'ler kendi DualSense kolunu da tanır.",
+  "faq.q2":"Yaş sınırı var mı?","faq.a2":"16 yaş altı 22:00'ye kadar gelebilir. Sonrası 16+.",
+  "faq.q3":"Rezervasyonuma geç kalırsam ne olur?","faq.a3":"İstasyonunu 15 dakika tutuyoruz. Sonra tekrar boş görünür.",
+  "faq.q4":"Özel parti düzenliyor musunuz?","faq.a4":"6 kişiden itibaren doğum günü ve ekip etkinlikleri. Fiyat için bize yaz.",
+  "visit.title":"Uğra","visit.sub":"Metroya iki dakika. Barda tost, enerji içeceği ve bubble tea var.","visit.addr":"Adres","visit.hours":"Saatler","visit.phone":"Telefon",
+  "visit.hoursv":"Pzt–Per 12:00–00:00<br>Cum–Paz 12:00–03:00",
+  "foot.photos":"Fotoğraflar: Pexels","foot.demo":"MaaezhDev'in örnek tasarımıdır. Respawn Lounge hayali bir işletmedir.",
+  "bm.title":"Yer ayırt","bm.name":"Adın","bm.station":"İstasyon","bm.hours":"Saat","bm.date":"Tarih","bm.time":"Başlangıç","bm.phone":"Telefon","bm.submit":"Rezervasyonu onayla",
+  "bm.done":"İstasyon ayrıldı","bm.ok":"Tamam","bm.err":"İstasyonu tutabilmemiz için adını, tarihi ve telefonunu yaz.",
+  "bm.summary":"{s} {d} günü saat {t} için {h} saatliğine senin. {p} numarasına hatırlatma göndereceğiz.",
+  "sm.gamer":"Oyuncu adı","sm.submit":"Yerimi ayır","sm.done":"Kaydın alındı","sm.err":"Yer ayırmak için oyuncu adını ve telefonunu yaz.","sm.summary":"{n}, {e} listesinde. Giriş, başlamadan 30 dakika önce açılır.",
+  "months":["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"]
+ }
+};
+let lang = 'en';
+try{ const s = localStorage.getItem('respawn-lang'); if (s && T[s]) lang = s; else if ((navigator.language||'').startsWith('tr')) lang = 'tr'; }catch(e){}
+const t = k => T[lang][k] ?? T.en[k] ?? k;
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  renderBoard(); updatePick(); renderGames(); setPrices(); dates();
+}
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => {
+  lang = b.dataset.lang; try{ localStorage.setItem('respawn-lang', lang); }catch(e){} applyLang();
+}));
+
+/* nav: solid on scroll + active link + drawer */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('solid', scrollY > 30);
+addEventListener('scroll', onScroll, {passive:true}); onScroll();
+const burger = document.querySelector('.burger'), drawer = document.getElementById('drawer');
+const setDrawer = open => { burger.setAttribute('aria-expanded', open); drawer.classList.toggle('open', open); document.body.style.overflow = open ? 'hidden' : ''; };
+burger.addEventListener('click', () => setDrawer(burger.getAttribute('aria-expanded') !== 'true'));
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+const links = [...document.querySelectorAll('.links a')];
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
+}), {rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section[id]').forEach(s => spy.observe(s));
+
+/* reveal on scroll */
+const rv = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); rv.unobserve(e.target); } }), {threshold:.12});
+document.querySelectorAll('.reveal').forEach((el,i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; rv.observe(el); });
+
+/* station board */
+const layout = {
+  pc:{prefix:'PC',count:12,busy:{2:40,3:70,5:15,8:120,9:55,11:25}},
+  ps:{prefix:'PS',count:6,busy:{1:35,4:80}},
+  sim:{prefix:'Rig',count:2,busy:{2:20}}
+};
+const rate = {PC:4, PS:5, Rig:8};
+let selected = null, hours = 2;
+const fmt = m => m >= 60 ? `${Math.floor(m/60)}h ${m%60 ? (m%60)+'m' : ''}`.trim() : `${m}m`;
+function renderBoard(){
+  let free = 0;
+  for (const [id,z] of Object.entries(layout)){
+    const el = document.getElementById(id); el.innerHTML = '';
+    for (let i=1;i<=z.count;i++){
+      const name = `${z.prefix} ${String(i).padStart(2,'0')}`, b = document.createElement('button');
+      b.type = 'button';
+      if (z.busy[i]){
+        b.className = 'st busy'; b.disabled = true;
+        b.innerHTML = `${name}<small>${t('board.freein')} ${fmt(z.busy[i])}</small>`;
+      } else {
+        free++;
+        const on = selected && selected.name === name;
+        b.className = 'st free' + (on ? ' sel' : '');
+        b.setAttribute('aria-pressed', on);
+        b.innerHTML = `${name}<small>${t('board.freeword')}</small>`;
+        b.addEventListener('click', () => { selected = {name, prefix:z.prefix}; renderBoard(); updatePick(); });
+      }
+      el.appendChild(b);
+    }
+  }
+  document.getElementById('free-count').textContent = free;
+}
+function updatePick(){
+  const p = document.getElementById('pick-text');
+  if (!selected){ p.textContent = t('board.tap'); return; }
+  p.innerHTML = `<b>${selected.name}</b> · ${hours}h · $${rate[selected.prefix]*hours}`;
+}
+document.querySelectorAll('.hours button').forEach(btn => btn.addEventListener('click', () => {
+  hours = +btn.dataset.h;
+  document.querySelectorAll('.hours button').forEach(x => x.setAttribute('aria-pressed', x === btn));
+  updatePick();
+}));
+/* the board "lives": every 20s a busy station counts down, occasionally frees up */
+setInterval(() => {
+  for (const z of Object.values(layout)) for (const k in z.busy){ z.busy[k] -= 1; if (z.busy[k] <= 0) delete z.busy[k]; }
+  renderBoard();
+}, 20000);
+
+/* prices toggle */
+let day = 'wd';
+function setPrices(){
+  document.querySelectorAll('.amt').forEach(a => {
+    const unit = a.querySelector('small').outerHTML;
+    a.innerHTML = '$' + a.dataset[day] + unit;
+  });
+}
+document.querySelectorAll('[data-day]').forEach(b => b.addEventListener('click', () => {
+  day = b.dataset.day;
+  document.querySelectorAll('[data-day]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  setPrices();
+}));
+
+/* games filter */
+const games = [
+  ['Valorant','pc',1],['EA FC 25','ps',1],['Counter-Strike 2','pc',1],['League of Legends','pc'],['Fortnite','pc'],['Gran Turismo 7','sim',1],
+  ['Tekken 8','ps'],['Minecraft','pc'],['Rocket League','pc'],['Call of Duty','ps'],['Overwatch 2','pc'],['Assetto Corsa','sim'],
+  ['Mortal Kombat 1','ps'],['It Takes Two','ps'],['F1 24','sim'],['Apex Legends','pc'],['Spider-Man 2','ps'],['iRacing','sim']
+];
+let filter = 'all';
+const label = {pc:'PC', ps:'PS5', sim:'Racing'};
+function renderGames(){
+  const list = document.getElementById('game-list');
+  list.innerHTML = games.map(([n,p,top]) => `<div class="game${top?' top':''}${filter!=='all'&&filter!==p?' hide':''}"><b>${n}</b><span>${p==='sim'?t('games.racing'):label[p]}</span></div>`).join('');
+}
+document.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => {
+  filter = b.dataset.f;
+  document.querySelectorAll('[data-f]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderGames();
+}));
+
+/* tournament dates relative to today + countdown */
+const evDays = [7, 14, 22, 29];
+function dates(){
+  const now = new Date(), m = t('months');
+  evDays.forEach((d,i) => {
+    const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + d);
+    document.querySelector(`[data-ev="${i}"]`).textContent = String(dt.getDate()).padStart(2,'0');
+    document.querySelector(`[data-evm="${i}"]`).textContent = m[dt.getMonth()];
+  });
+}
+const target = (() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate() + evDays[0], 20, 0, 0); })();
+function tick(){
+  let s = Math.max(0, Math.floor((target - Date.now())/1000));
+  const v = {d:Math.floor(s/86400), h:Math.floor(s%86400/3600), m:Math.floor(s%3600/60), s:s%60};
+  for (const k in v) document.querySelector(`[data-c="${k}"]`).textContent = String(v[k]).padStart(2,'0');
+}
+tick(); setInterval(tick, 1000);
+
+/* modals */
+const bm = document.getElementById('book-modal'), sm = document.getElementById('sign-modal'), lb = document.getElementById('lb');
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+const stationSel = document.getElementById('bm-station');
+function freeStations(prefix){
+  const out = [];
+  for (const z of Object.values(layout)) if (!prefix || z.prefix === prefix)
+    for (let i=1;i<=z.count;i++) if (!z.busy[i]) out.push(`${z.prefix} ${String(i).padStart(2,'0')}`);
+  return out;
+}
+function bmTotal(){
+  const f = document.getElementById('book-form');
+  const pre = f.station.value.split(' ')[0];
+  document.getElementById('bm-total').textContent = '$' + (rate[pre] * +f.hours.value);
+}
+document.querySelectorAll('[data-book]').forEach(b => b.addEventListener('click', () => {
+  setDrawer(false);
+  const f = document.getElementById('book-form');
+  const list = freeStations(b.dataset.zone);
+  stationSel.innerHTML = list.map(s => `<option>${s}</option>`).join('');
+  if (selected && !b.dataset.zone) stationSel.value = selected.name;
+  f.hours.value = String(hours);
+  const d = new Date(); f.date.value = d.toISOString().slice(0,10); f.date.min = f.date.value;
+  document.getElementById('bm-err').textContent = '';
+  f.style.display = ''; document.getElementById('bm-done').classList.remove('show');
+  bmTotal(); bm.showModal(); f.name.focus();
+}));
+document.getElementById('book-form').addEventListener('change', bmTotal);
+document.getElementById('book-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (!f.name.value.trim() || !f.date.value || !f.phone.value.trim()){ document.getElementById('bm-err').textContent = t('bm.err'); return; }
+  const d = new Date(f.date.value + 'T00:00');
+  const txt = t('bm.summary').replace('{s}', f.station.value).replace('{d}', `${d.getDate()} ${t('months')[d.getMonth()]}`).replace('{t}', f.time.value).replace('{h}', f.hours.value).replace('{p}', f.phone.value);
+  const [pre, num] = f.station.value.split(' ');
+  for (const z of Object.values(layout)) if (z.prefix === pre) z.busy[+num] = +f.hours.value * 60;
+  selected = null; renderBoard(); updatePick();
+  document.getElementById('bm-done-text').textContent = txt;
+  f.style.display = 'none'; f.reset(); document.getElementById('bm-done').classList.add('show');
+});
+document.querySelectorAll('[data-signup]').forEach(b => b.addEventListener('click', () => {
+  const f = document.getElementById('sign-form');
+  document.getElementById('sm-title').textContent = b.dataset.signup;
+  f.style.display = ''; document.getElementById('sm-done').classList.remove('show'); document.getElementById('sm-err').textContent = '';
+  sm.showModal(); f.tag.focus();
+}));
+document.getElementById('sign-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (!f.tag.value.trim() || !f.phone.value.trim()){ document.getElementById('sm-err').textContent = t('sm.err'); return; }
+  document.getElementById('sm-done-text').textContent = t('sm.summary').replace('{n}', f.tag.value).replace('{e}', document.getElementById('sm-title').textContent);
+  f.style.display = 'none'; f.reset(); document.getElementById('sm-done').classList.add('show');
+});
+/* lightbox */
+document.querySelectorAll('#gal button').forEach(b => b.addEventListener('click', () => {
+  const img = b.querySelector('img'), big = document.getElementById('lb-img');
+  big.src = img.src.replace(/w=\d+/, 'w=1800'); big.alt = img.alt; lb.showModal();
+}));
+
+applyLang();
+</script>
+</body>
+</html>
