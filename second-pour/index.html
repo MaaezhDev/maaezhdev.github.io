@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Second Pour, neighbourhood coffee</title>
+<meta name="description" content="Small-batch coffee roasted every Tuesday. See today's menu, order ahead for pickup, find us on Linden Row.">
+<meta property="og:image" content="https://images.pexels.com/photos/2159115/pexels-photo-2159115.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,500;0,800;1,500&family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#1E3A2B; --forest-2:#2A4A38; --forest-3:#3A5A48;
+  --pistachio:#D9E7C3; --leaf:#B8D196; --mist:#EEF4E4;
+  --plum:#7A2E5E; --plum-2:#8F3A6F; --butter:#F4C84A; --white:#fff;
+  --display:"Bitter",Georgia,serif; --body:"Fira Sans",system-ui,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{overflow-x:hidden;font-family:var(--body);background:var(--pistachio);color:var(--forest);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--plum);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 16px var(--body);background:var(--plum);color:#fff;border:0;border-radius:12px;padding:14px 24px;text-decoration:none;cursor:pointer;transition:background .15s,transform .15s var(--ease)}
+.btn:hover{background:var(--plum-2)}
+.btn:active{transform:scale(.97)}
+.btn-ghost{background:transparent;color:var(--forest);box-shadow:inset 0 0 0 2px var(--forest)}
+.btn-ghost:hover{background:var(--forest);color:var(--pistachio)}
+.btn-butter{background:var(--butter);color:var(--forest)}
+.btn-butter:hover{background:#f7d572}
+
+/* NAV */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .25s,box-shadow .25s}
+.nav.solid{background:rgba(217,231,195,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(30,58,43,.12)}
+.nav .wrap{display:flex;align-items:center;gap:26px;height:80px}
+.logo{font:800 25px var(--display);text-decoration:none;letter-spacing:-.01em;margin-right:auto;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.logo svg{width:30px;height:30px}
+.links{display:flex;gap:26px;list-style:none;font-weight:500}
+.links a{text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+.links a:hover,.links a.on{border-color:var(--plum)}
+.lang{display:flex;background:rgba(30,58,43,.08);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;border-radius:999px;padding:6px 11px;font-weight:600;font-size:13px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--forest);color:var(--pistachio)}
+.cart-btn{position:relative;width:46px;height:46px;border-radius:12px;border:2px solid var(--forest);background:transparent;cursor:pointer;display:grid;place-items:center}
+.cart-btn svg{width:22px;height:22px}
+.cart-btn b{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;border-radius:999px;background:var(--plum);color:#fff;font-size:12px;display:grid;place-items:center;padding:0 6px;transform:scale(0);transition:transform .25s var(--ease)}
+.cart-btn b.has{transform:scale(1)}
+.cart-btn.bump{animation:bump .4s var(--ease)}
+@keyframes bump{40%{transform:scale(1.15)}}
+.burger{display:none;width:46px;height:46px;border:0;border-radius:12px;background:var(--forest);cursor:pointer;place-items:center}
+.burger span,.burger span::before,.burger span::after{display:block;width:20px;height:2px;background:var(--pistachio);position:relative;transition:.2s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.burger[aria-expanded=true] span{background:transparent}
+.burger[aria-expanded=true] span::before{top:0;transform:rotate(45deg)}
+.burger[aria-expanded=true] span::after{top:0;transform:rotate(-45deg)}
+.drawer{position:fixed;inset:80px 0 0;background:var(--pistachio);z-index:49;padding:20px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s var(--ease)}
+.drawer.open{opacity:1;visibility:visible;transform:none}
+.drawer a{text-decoration:none;font:800 30px var(--display);padding:12px 0;border-bottom:1px solid var(--leaf)}
+
+/* HERO */
+.hero{padding:130px 0 70px}
+.hero .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.status{display:inline-flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:8px 16px 8px 12px;font-weight:500;font-size:15px;margin-bottom:26px}
+.status i{width:10px;height:10px;border-radius:50%;background:#2f9e5b;box-shadow:0 0 0 4px #cdeeda}
+.status.closed i{background:#c0504d;box-shadow:0 0 0 4px #f3d3d2}
+.hero h1{font:800 clamp(46px,6.2vw,88px)/.98 var(--display);letter-spacing:-.025em}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--plum)}
+.hero p{font-size:20px;max-width:28em;margin:26px 0 34px}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-img{position:relative;aspect-ratio:4/5;max-height:640px}
+.hero-img .frame{position:absolute;inset:0;border-radius:200px 200px 28px 28px;overflow:hidden;background:var(--leaf);animation:unveil 1.1s var(--ease) both}
+@keyframes unveil{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+.hero-img img{width:100%;height:100%;object-fit:cover}
+.hero-img .stamp{position:absolute;left:-36px;bottom:48px;width:150px;height:150px;border-radius:50%;background:var(--butter);display:grid;place-items:center;text-align:center;font:800 15px/1.2 var(--display);padding:20px;box-shadow:0 20px 40px -18px rgba(30,58,43,.5);animation:spinin 1s .5s var(--ease) both}
+.stamp b{display:block;font-size:34px}
+@keyframes spinin{from{opacity:0;transform:rotate(-30deg) scale(.6)}}
+
+/* MARQUEE */
+.marquee{background:var(--plum);color:#fff;overflow:hidden;white-space:nowrap}
+.marquee div{display:inline-flex;gap:46px;padding:15px 0;animation:mq 36s linear infinite;font:500 19px var(--display);font-style:italic}
+.marquee span::after{content:"☕";margin-left:46px;font-style:normal}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+section.s{padding:110px 0}
+h2{font:800 clamp(36px,4.4vw,58px)/1.02 var(--display);letter-spacing:-.02em}
+.sub{font-size:18px;max-width:32em;margin-top:12px;opacity:.85}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* MENU */
+.menu{background:var(--forest);color:var(--pistachio)}
+.tabs{display:flex;gap:6px;background:var(--forest-2);padding:6px;border-radius:14px}
+.tabs button{color:var(--pistachio);background:transparent;border:0;border-radius:10px;padding:10px 18px;font-weight:600;font-size:15px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--butter);color:var(--forest)}
+.mgrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.mphoto{position:sticky;top:110px;border-radius:24px;overflow:hidden;aspect-ratio:4/5;background:var(--forest-2)}
+.mphoto img{width:100%;height:100%;object-fit:cover;transition:opacity .35s}
+.mphoto figcaption{position:absolute;left:16px;bottom:16px;background:rgba(30,58,43,.85);backdrop-filter:blur(6px);padding:8px 14px;border-radius:10px;font-size:14px}
+.item{display:grid;grid-template-columns:1fr auto auto;gap:4px 18px;align-items:center;padding:20px 0;border-bottom:1px solid var(--forest-3)}
+.item h3{font:500 22px var(--display)}
+.item .p{font:800 21px var(--display);color:var(--butter)}
+.item p{grid-column:1/2;font-size:15px;opacity:.72}
+.add{width:40px;height:40px;border-radius:50%;border:2px solid var(--leaf);background:transparent;color:var(--pistachio);font-size:22px;line-height:1;cursor:pointer;grid-row:1/3;grid-column:3;transition:background .15s,transform .15s}
+.add:hover{background:var(--leaf);color:var(--forest)}
+.add.ok{background:var(--butter);border-color:var(--butter);color:var(--forest);transform:rotate(360deg)}
+.tag{display:inline-block;margin-left:10px;font:600 12px var(--body);background:var(--plum);color:#fff;padding:3px 9px;border-radius:999px;vertical-align:4px}
+.milk{margin-top:26px;font-size:15px;opacity:.75}
+
+/* ROAST */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.step figure{border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--leaf);margin-bottom:22px}
+.step img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.step:hover img{transform:scale(1.05)}
+.step h3{font:800 26px var(--display);margin-bottom:6px;display:flex;gap:12px;align-items:baseline}
+.step h3 span{font:500 16px var(--body);color:var(--plum)}
+.step p{max-width:24em}
+
+/* GALLERY */
+.gal-wrap{background:var(--mist)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:12px}
+.gallery button{border:0;padding:0;border-radius:18px;overflow:hidden;cursor:zoom-in;background:var(--leaf)}
+.gallery button:nth-child(1){grid-row:span 2}
+.gallery button:nth-child(3){grid-column:span 2;grid-row:span 2}
+.gallery button:nth-child(6){grid-column:span 3}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.gallery button:hover img{transform:scale(1.06)}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(1100px,94vw);margin:auto}
+.lightbox::backdrop{background:rgba(20,38,28,.9)}
+.lightbox img{max-height:84vh;width:auto;border-radius:16px}
+.lb-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:22px;cursor:pointer}
+
+/* FAQ + VISIT */
+.visit{background:#fff}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+.hours{width:100%;border-collapse:collapse;margin:26px 0 30px}
+.hours td{padding:11px 0;border-bottom:1px solid var(--mist)}
+.hours td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.hours tr.today td{font-weight:600;color:var(--plum)}
+.hours tr.today td:first-child::after{content:attr(data-today);margin-left:8px;font-size:12px;background:var(--plum);color:#fff;padding:2px 8px;border-radius:999px;vertical-align:2px}
+.addr{display:grid;gap:4px;margin-bottom:26px}
+details{background:var(--mist);border-radius:16px;margin-bottom:10px}
+summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:600;font-size:17px;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:500 24px/1 var(--display);transition:transform .2s;color:var(--plum)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 22px 20px;opacity:.85}
+
+/* CART DRAWER */
+.cart{border:0;padding:0;margin:0 0 0 auto;height:100%;max-height:100%;width:min(440px,100%);background:var(--pistachio);color:var(--forest)}
+.cart::backdrop{background:rgba(20,38,28,.55)}
+.cart[open]{animation:slide .35s var(--ease)}
+@keyframes slide{from{transform:translateX(100%)}}
+.cart-in{display:flex;flex-direction:column;height:100%;padding:26px}
+.cart h3{font:800 28px var(--display);margin-bottom:18px}
+.x{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(30,58,43,.08);font-size:20px;cursor:pointer}
+.lines{flex:1;overflow:auto;display:grid;align-content:start;gap:10px}
+.line{display:grid;grid-template-columns:1fr auto;gap:4px 12px;background:#fff;border-radius:14px;padding:14px 16px}
+.line b{font-weight:600}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:30px;height:30px;border-radius:50%;border:2px solid var(--leaf);background:transparent;cursor:pointer;font-weight:600}
+.line small{opacity:.7}
+.empty{text-align:center;opacity:.7;padding:40px 0}
+.cart form{display:grid;gap:12px;border-top:2px solid var(--leaf);padding-top:18px;margin-top:14px}
+.cart label{display:grid;gap:6px;font-weight:600;font-size:14px}
+.cart input,.cart select{font:400 16px var(--body);padding:12px 14px;border-radius:10px;border:2px solid var(--leaf);background:#fff;color:var(--forest)}
+.cart input:focus,.cart select:focus{outline:none;border-color:var(--plum)}
+.total{display:flex;justify-content:space-between;font:800 22px var(--display)}
+.err{color:#a3243b;font-size:14px;font-weight:500;min-height:1em}
+.done{display:none;text-align:center;padding:60px 10px}
+.done.show{display:block}
+.done .tick{width:76px;height:76px;border-radius:50%;background:var(--plum);color:#fff;margin:0 auto 18px;display:grid;place-items:center;font-size:36px}
+.done h3{margin-bottom:8px}
+.done p{margin-bottom:24px}
+
+footer{background:var(--forest);color:#a9c09b;padding:28px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:var(--forest);color:var(--pistachio);padding:12px 18px;border-radius:12px;font-weight:500;z-index:60;visibility:hidden;transition:transform .35s var(--ease),visibility .35s;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)}
+.toast.show{transform:translate(-50%,0);visibility:visible}
+
+@media (max-width:980px){
+  .links,.nav .lang,.nav .btn{display:none}
+  .burger{display:grid}
+  .hero .wrap,.mgrid,.vgrid{grid-template-columns:minmax(0,1fr)}
+  .hero-img{max-width:460px;width:100%;justify-self:center}
+  .mphoto{position:relative;top:0;aspect-ratio:16/10}
+  .steps{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr;grid-auto-rows:170px}
+  .gallery button:nth-child(6){grid-column:span 1}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  section.s{padding:76px 0}
+  .hero{padding:110px 0 56px}
+  .hero p{font-size:18px}
+  .logo{font-size:21px}
+  .nav .wrap{gap:12px}
+  .hero-img .stamp{left:-8px;width:120px;height:120px;font-size:13px}
+  .stamp b{font-size:26px}
+  .tabs{width:100%}.tabs button{flex:1;padding:10px 6px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 11h18l-2 14a3 3 0 0 1-3 3h-8a3 3 0 0 1-3-3z" fill="#7A2E5E"/><path d="M23 14c5 0 5 8-1 8" stroke="#7A2E5E" stroke-width="2.5" fill="none"/><path d="M11 3c-1.5 2 1.5 3 0 5M16 2c-1.5 2 1.5 3 0 5" stroke="#1E3A2B" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Second Pour</a>
+    <nav aria-label="Main"><ul class="links">
+      <li><a href="#menu" data-i18n="nav.menu">Menu</a></li>
+      <li><a href="#roast" data-i18n="nav.roast">Our roast</a></li>
+      <li><a href="#gallery" data-i18n="nav.gallery">Gallery</a></li>
+      <li><a href="#visit" data-i18n="nav.visit">Visit</a></li>
+    </ul></nav>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="tr" aria-pressed="false">TR</button></div>
+    <button class="cart-btn" type="button" id="cart-open" aria-label="Open order"><svg viewBox="0 0 24 24" fill="none" stroke="#1E3A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.5 12h-11z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><b id="cart-count">0</b></button>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Menu"><span></span></button>
+  </div>
+</header>
+<div class="drawer" id="drawer">
+  <a href="#menu" data-i18n="nav.menu">Menu</a>
+  <a href="#roast" data-i18n="nav.roast">Our roast</a>
+  <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
+  <a href="#visit" data-i18n="nav.visit">Visit</a>
+  <div class="lang" role="group" aria-label="Language" style="align-self:flex-start;margin-top:20px"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="tr" aria-pressed="false">TR</button></div>
+</div>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div>
+      <span class="status" id="status"><i></i><span id="status-text"></span></span>
+      <h1 id="h1"><span data-i18n="hero.t1">Roasted on Tuesday.</span> <em data-i18n="hero.t2">Poured all week.</em></h1>
+      <p data-i18n="hero.lead">A small coffee bar on Linden Row. We roast one batch a week in the back room, bake every morning and save the window seat for whoever gets here first.</p>
+      <div class="actions">
+        <a class="btn" href="#menu" data-i18n="hero.menu">Order from the menu</a>
+        <a class="btn btn-ghost" href="#visit" data-i18n="hero.find">Find us</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <div class="frame"><img src="https://images.pexels.com/photos/2159115/pexels-photo-2159115.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Barista pouring coffee at the bar" fetchpriority="high"></div>
+      <div class="stamp" aria-hidden="true"><span><b>12 kg</b><span data-i18n="hero.stamp">roasted every Tuesday</span></span></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div>
+  <span data-i18n="mq.1">This week: washed Ethiopia, peach and jasmine</span><span data-i18n="mq.2">Cardamom buns out of the oven at 7:00</span><span data-i18n="mq.3">Bring your own cup, get 10% off</span><span data-i18n="mq.4">Free oat milk, always</span>
+  <span data-i18n="mq.1">This week: washed Ethiopia, peach and jasmine</span><span data-i18n="mq.2">Cardamom buns out of the oven at 7:00</span><span data-i18n="mq.3">Bring your own cup, get 10% off</span><span data-i18n="mq.4">Free oat milk, always</span>
+</div></div>
+
+<section class="s menu" id="menu" aria-labelledby="menu-title">
+  <div class="wrap">
+    <div class="head reveal">
+      <div><h2 id="menu-title" data-i18n="menu.title">Today's menu</h2><p class="sub" data-i18n="menu.sub">Tap + to add to your order and pick it up without waiting in line.</p></div>
+      <div class="tabs" role="tablist" aria-label="Menu sections">
+        <button role="tab" aria-selected="true" aria-controls="items" data-tab="coffee" data-i18n="menu.coffee">Coffee</button>
+        <button role="tab" aria-selected="false" aria-controls="items" data-tab="tea" data-i18n="menu.tea">Tea & more</button>
+        <button role="tab" aria-selected="false" aria-controls="items" data-tab="bakes" data-i18n="menu.bakes">Bakes</button>
+      </div>
+    </div>
+    <div class="mgrid">
+      <figure class="mphoto reveal"><img id="mphoto" src="https://images.pexels.com/photos/15801079/pexels-photo-15801079.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Latte art being poured" loading="lazy"><figcaption id="mcap" data-i18n="menu.cap.coffee">Flat white, our most ordered drink</figcaption></figure>
+      <div>
+        <div id="items" role="tabpanel"></div>
+        <p class="milk" data-i18n="menu.milk">Oat, almond and whole milk at no extra cost. Any drink can be made decaf.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="roast" aria-labelledby="roast-title">
+  <div class="wrap">
+    <div class="head reveal"><div><h2 id="roast-title" data-i18n="roast.title">From green bean to your cup in seven days</h2></div></div>
+    <div class="steps">
+      <article class="step reveal"><figure><img src="https://images.pexels.com/photos/6079719/pexels-photo-6079719.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Roasted beans cooling in a metal drum" loading="lazy"></figure><h3><span>1</span><span data-i18n="roast.s1" style="font:inherit;color:inherit">Pick</span></h3><p data-i18n="roast.p1">We buy small lots directly from two farms in Colombia and Ethiopia and taste every sample before it ships.</p></article>
+      <article class="step reveal"><figure><img src="https://images.pexels.com/photos/4820676/pexels-photo-4820676.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Coffee beans turning in the roaster" loading="lazy"></figure><h3><span>2</span><span data-i18n="roast.s2" style="font:inherit;color:inherit">Roast</span></h3><p data-i18n="roast.p2">Every Tuesday, 12 kilos at a time, light enough that you can still taste where it was grown.</p></article>
+      <article class="step reveal"><figure><img src="https://images.pexels.com/photos/2159108/pexels-photo-2159108.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Barista brewing coffee by hand" loading="lazy"></figure><h3><span>3</span><span data-i18n="roast.s3" style="font:inherit;color:inherit">Pour</span></h3><p data-i18n="roast.p3">Beans rest for three days, then go straight to the grinder. Anything older than three weeks becomes cold brew.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="s gal-wrap" id="gallery" aria-labelledby="g-title">
+  <div class="wrap">
+    <div class="head reveal"><div><h2 id="g-title" data-i18n="gal.title">A slow morning here</h2><p class="sub" data-i18n="gal.sub">Tap a photo to see it larger.</p></div></div>
+    <div class="gallery reveal" id="gal">
+      <button type="button"><img src="https://images.pexels.com/photos/4450335/pexels-photo-4450335.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Bar seating by a big window with plants" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/4913342/pexels-photo-4913342.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Cappuccino seen from above" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/2159115/pexels-photo-2159115.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Barista at work behind the bar" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/31079905/pexels-photo-31079905.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Croissant with butter on a wooden board" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/20117299/pexels-photo-20117299.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Espresso machine and stacked cups" loading="lazy"></button>
+      <button type="button"><img src="https://images.pexels.com/photos/10828396/pexels-photo-10828396.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Two lattes on a dark table" loading="lazy"></button>
+    </div>
+  </div>
+</section>
+
+<section class="s visit" id="visit" aria-labelledby="v-title">
+  <div class="wrap vgrid">
+    <div class="reveal">
+      <h2 id="v-title" data-i18n="visit.title">Come say hi</h2>
+      <div class="addr" style="margin-top:20px"><b>7 Linden Row, Old Town</b><span>+1 (555) 019-4471</span></div>
+      <table class="hours" id="hours"><tbody></tbody></table>
+      <button class="btn" type="button" id="order-cta" data-i18n="visit.order">Order ahead</button>
+    </div>
+    <div class="reveal">
+      <h3 style="font:800 26px var(--display);margin-bottom:18px" data-i18n="faq.title">Questions we get a lot</h3>
+      <details><summary data-i18n="faq.q1">Do you have Wi-Fi and outlets?</summary><p data-i18n="faq.a1">Yes to both. On weekends we ask laptop users to share the big table.</p></details>
+      <details><summary data-i18n="faq.q2">Can I buy beans to take home?</summary><p data-i18n="faq.a2">Every Wednesday we put 250 g bags of the week's roast on the shelf. We'll grind them for your brewer.</p></details>
+      <details><summary data-i18n="faq.q3">Are you dog friendly?</summary><p data-i18n="faq.a3">Very. There's a water bowl by the door and biscuits behind the counter.</p></details>
+      <details><summary data-i18n="faq.q4">Do you cater events?</summary><p data-i18n="faq.a4">We bring a pop-up espresso bar for 20 to 150 people. Ask us for a quote.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© Second Pour · <span data-i18n="foot.photos">Photos from Pexels</span></span><span data-i18n="foot.demo">Concept site by MaaezhDev. Second Pour is a fictional business.</span></div></footer>
+
+<dialog class="cart" id="cart" aria-labelledby="cart-title">
+  <div class="cart-in">
+    <button class="x" type="button" data-close aria-label="Close">×</button>
+    <div id="cart-main" style="display:flex;flex-direction:column;flex:1;min-height:0">
+      <h3 id="cart-title" data-i18n="cart.title">Your order</h3>
+      <div class="lines" id="lines"></div>
+      <form id="cart-form" novalidate>
+        <div class="total"><span data-i18n="cart.total">Total</span><span id="total">$0.00</span></div>
+        <label><span data-i18n="cart.name">Name for the cup</span><input name="name" autocomplete="given-name"></label>
+        <label><span data-i18n="cart.time">Pickup</span><select name="time" id="pick-time"></select></label>
+        <p class="err" id="cart-err" role="alert"></p>
+        <button class="btn" type="submit" data-i18n="cart.send">Send order</button>
+      </form>
+    </div>
+    <div class="done" id="cart-done">
+      <div class="tick">✓</div>
+      <h3 data-i18n="cart.done">Order sent</h3>
+      <p id="done-text"></p>
+      <button class="btn btn-ghost" type="button" data-close data-i18n="cart.close">Back to the site</button>
+    </div>
+  </div>
+</dialog>
+<dialog class="lightbox" id="lb"><button class="lb-close" type="button" data-close aria-label="Close">×</button><img id="lb-img" alt=""></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const IMG = id => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=900`;
+const MENU = {
+  coffee:{img:15801079, items:[
+    ['espresso',2.80],['flat',4.20,1],['oat',4.60],['filter',3.90],['cold',4.40],['cortado',3.60]]},
+  tea:{img:4913342, items:[['chai',4.30,1],['matcha',4.80],['earl',3.20],['choc',4.00],['lemon',3.80]]},
+  bakes:{img:31079905, items:[['bun',3.70,1],['croissant',3.20],['banana',3.40],['toastie',6.50],['olive',4.10]]}
+};
+const T = {
+en:{
+ "nav.menu":"Menu","nav.roast":"Our roast","nav.gallery":"Gallery","nav.visit":"Visit",
+ "hero.t1":"Roasted on Tuesday.","hero.t2":"Poured all week.","hero.lead":"A small coffee bar on Linden Row. We roast one batch a week in the back room, bake every morning and save the window seat for whoever gets here first.",
+ "hero.menu":"Order from the menu","hero.find":"Find us","hero.stamp":"roasted every Tuesday",
+ "open":"Open now, until {t}","closed":"Closed now, opens {d} at {t}","today":"today","tomorrow":"tomorrow",
+ "mq.1":"This week: washed Ethiopia, peach and jasmine","mq.2":"Cardamom buns out of the oven at 7:00","mq.3":"Bring your own cup, get 10% off","mq.4":"Free oat milk, always",
+ "menu.title":"Today's menu","menu.sub":"Tap + to add to your order and pick it up without waiting in line.","menu.coffee":"Coffee","menu.tea":"Tea & more","menu.bakes":"Bakes",
+ "menu.cap.coffee":"Flat white, our most ordered drink","menu.cap.tea":"Chai latte with house syrup","menu.cap.bakes":"Croissants, laminated over two days",
+ "menu.milk":"Oat, almond and whole milk at no extra cost. Any drink can be made decaf.","fav":"Favourite","add":"Add {n} to order","added":"{n} added to your order",
+ "i.espresso":["Espresso","Double shot, this week a washed Ethiopian with peach notes"],"i.flat":["Flat white","Double shot, silky milk, our most ordered drink"],
+ "i.oat":["Oat latte","Barista oat milk, slightly sweet, very smooth"],"i.filter":["Filter of the week","Hand-poured, ask what's on the bar today"],
+ "i.cold":["Cold brew","Steeped for 18 hours, served over one big ice cube"],"i.cortado":["Cortado","Equal parts espresso and warm milk"],
+ "i.chai":["Chai latte","House chai syrup, cinnamon and black pepper"],"i.matcha":["Matcha","Ceremonial grade, whisked to order"],"i.earl":["Earl grey","Loose leaf, served in a pot for one"],
+ "i.choc":["Hot chocolate","70% dark chocolate melted into whole milk"],"i.lemon":["Fresh lemonade","Lemon, mint and a little honey"],
+ "i.bun":["Cardamom bun","Baked at 7:00, usually gone by noon"],"i.croissant":["Butter croissant","Laminated over two days"],"i.banana":["Banana bread","Brown butter and walnut, served warm"],
+ "i.toastie":["Cheese toastie","Sourdough, aged cheddar, pickled onion"],"i.olive":["Olive oil cake","Orange zest, gluten free"],
+ "roast.title":"From green bean to your cup in seven days","roast.s1":"Pick","roast.s2":"Roast","roast.s3":"Pour",
+ "roast.p1":"We buy small lots directly from two farms in Colombia and Ethiopia and taste every sample before it ships.","roast.p2":"Every Tuesday, 12 kilos at a time, light enough that you can still taste where it was grown.","roast.p3":"Beans rest for three days, then go straight to the grinder. Anything older than three weeks becomes cold brew.",
+ "gal.title":"A slow morning here","gal.sub":"Tap a photo to see it larger.",
+ "visit.title":"Come say hi","visit.order":"Order ahead","days":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+ "faq.title":"Questions we get a lot","faq.q1":"Do you have Wi-Fi and outlets?","faq.a1":"Yes to both. On weekends we ask laptop users to share the big table.",
+ "faq.q2":"Can I buy beans to take home?","faq.a2":"Every Wednesday we put 250 g bags of the week's roast on the shelf. We'll grind them for your brewer.",
+ "faq.q3":"Are you dog friendly?","faq.a3":"Very. There's a water bowl by the door and biscuits behind the counter.","faq.q4":"Do you cater events?","faq.a4":"We bring a pop-up espresso bar for 20 to 150 people. Ask us for a quote.",
+ "foot.photos":"Photos from Pexels","foot.demo":"Concept site by MaaezhDev. Second Pour is a fictional business.",
+ "cart.title":"Your order","cart.total":"Total","cart.name":"Name for the cup","cart.time":"Pickup","cart.send":"Send order","cart.done":"Order sent","cart.close":"Back to the site",
+ "cart.empty":"Nothing here yet. Add something from the menu.","cart.err.empty":"Add at least one item from the menu.","cart.err.name":"Add a name so we know whose cup it is.",
+ "cart.in":"In {m} minutes","cart.summary":"Thanks {n}. Your order will be on the counter by the door {t}.","cart.when":"in {m} minutes","cart.browse":"Browse the menu"
+},
+tr:{
+ "nav.menu":"Menü","nav.roast":"Kavurma","nav.gallery":"Galeri","nav.visit":"Ulaşım",
+ "hero.t1":"Salı kavrulur.","hero.t2":"Bütün hafta demlenir.","hero.lead":"Linden Row'da küçük bir kahve barı. Haftada bir kez arka odada kavuruyor, her sabah fırın yakıyor ve pencere kenarını ilk gelene saklıyoruz.",
+ "hero.menu":"Menüden sipariş ver","hero.find":"Yol tarifi","hero.stamp":"her salı kavrulur",
+ "open":"Şu an açık, {t}'e kadar","closed":"Şu an kapalı, {d} {t}'de açılıyor","today":"bugün","tomorrow":"yarın",
+ "mq.1":"Bu hafta: yıkanmış Etiyopya, şeftali ve yasemin","mq.2":"Kakuleli çörekler 7:00'de fırından çıkıyor","mq.3":"Kendi bardağını getir, %10 indirim kazan","mq.4":"Yulaf sütü her zaman ücretsiz",
+ "menu.title":"Bugünün menüsü","menu.sub":"Siparişine eklemek için + tuşuna bas, sıra beklemeden al.","menu.coffee":"Kahve","menu.tea":"Çay ve diğerleri","menu.bakes":"Fırından",
+ "menu.cap.coffee":"Flat white, en çok sipariş edilenimiz","menu.cap.tea":"Ev yapımı şuruplu chai latte","menu.cap.bakes":"İki günde katlanan kruvasanlar",
+ "menu.milk":"Yulaf, badem ve tam yağlı süt ekstra ücretsiz. Her içecek kafeinsiz yapılabilir.","fav":"Favori","add":"{n} siparişe ekle","added":"{n} siparişine eklendi",
+ "i.espresso":["Espresso","Double shot, bu hafta şeftali notalı yıkanmış Etiyopya"],"i.flat":["Flat white","Double shot, ipeksi süt, en çok sipariş edilenimiz"],
+ "i.oat":["Yulaf sütlü latte","Barista yulaf sütü, hafif tatlı, çok yumuşak"],"i.filter":["Haftanın filtre kahvesi","Elle demlenir, bugün barda ne var sor"],
+ "i.cold":["Cold brew","18 saat demlenir, tek büyük buzla servis edilir"],"i.cortado":["Cortado","Eşit oranda espresso ve sıcak süt"],
+ "i.chai":["Chai latte","Ev yapımı chai şurubu, tarçın ve karabiber"],"i.matcha":["Matcha","Seremoni kalitesi, siparişe göre çırpılır"],"i.earl":["Earl grey","Yaprak çay, tek kişilik demlikte"],
+ "i.choc":["Sıcak çikolata","%70 bitter çikolata, tam yağlı sütte eritilir"],"i.lemon":["Taze limonata","Limon, nane ve biraz bal"],
+ "i.bun":["Kakuleli çörek","7:00'de pişer, genelde öğlene bitmiş olur"],"i.croissant":["Tereyağlı kruvasan","İki günde katlanır"],"i.banana":["Muzlu kek","Kavrulmuş tereyağı ve ceviz, sıcak servis"],
+ "i.toastie":["Peynirli tost","Ekşi mayalı ekmek, eski kaşar, turşu soğan"],"i.olive":["Zeytinyağlı kek","Portakal kabuğu, glutensiz"],
+ "roast.title":"Çiğ çekirdekten fincanına yedi günde","roast.s1":"Seç","roast.s2":"Kavur","roast.s3":"Demle",
+ "roast.p1":"Kolombiya ve Etiyopya'daki iki çiftlikten doğrudan küçük partiler alıyor, her numuneyi gelmeden tadıyoruz.","roast.p2":"Her salı, 12 kiloluk partiler halinde, nerede yetiştiği hâlâ anlaşılacak kadar açık kavrulur.","roast.p3":"Çekirdekler üç gün dinlenir, sonra doğrudan değirmene gider. Üç haftayı geçen her şey cold brew olur.",
+ "gal.title":"Burada ağır bir sabah","gal.sub":"Büyütmek için bir fotoğrafa dokun.",
+ "visit.title":"Uğra, merhaba de","visit.order":"Önceden sipariş ver","days":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],
+ "faq.title":"Sık sorulanlar","faq.q1":"Wi-Fi ve priz var mı?","faq.a1":"İkisi de var. Hafta sonları laptopla gelenlerden büyük masayı paylaşmalarını rica ediyoruz.",
+ "faq.q2":"Eve çekirdek alabilir miyim?","faq.a2":"Her çarşamba haftanın kavurmasından 250 g'lık paketler rafta. Demleme yöntemine göre çekeriz.",
+ "faq.q3":"Köpek dostu musunuz?","faq.a3":"Çok. Kapının yanında su kabı, tezgâhın arkasında bisküvi var.","faq.q4":"Etkinliklere hizmet veriyor musunuz?","faq.a4":"20 ile 150 kişi arası etkinliklere mobil espresso barı getiriyoruz. Fiyat için bize yaz.",
+ "foot.photos":"Fotoğraflar: Pexels","foot.demo":"MaaezhDev'in örnek tasarımıdır. Second Pour hayali bir işletmedir.",
+ "cart.title":"Siparişin","cart.total":"Toplam","cart.name":"Bardağa yazılacak isim","cart.time":"Teslim alma","cart.send":"Siparişi gönder","cart.done":"Sipariş gönderildi","cart.close":"Siteye dön",
+ "cart.empty":"Henüz bir şey yok. Menüden bir şey ekle.","cart.err.empty":"Menüden en az bir ürün ekle.","cart.err.name":"Bardağın kimin olduğunu bilmemiz için bir isim yaz.",
+ "cart.in":"{m} dakika sonra","cart.summary":"Teşekkürler {n}. Siparişin {t} kapının yanındaki tezgâhta olacak.","cart.when":"{m} dakika sonra","cart.browse":"Menüye göz at"
+}};
+let lang = 'en';
+try{ const s = localStorage.getItem('sp-lang'); if (s && T[s]) lang = s; else if ((navigator.language||'').startsWith('tr')) lang = 'tr'; }catch(e){}
+const t = k => T[lang][k] ?? T.en[k] ?? k;
+const money = n => '$' + n.toFixed(2);
+let tab = 'coffee';
+const cart = {};
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => el.innerHTML = t(el.dataset.i18n));
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  renderMenu(); renderCart(); renderHours(); status(); pickTimes();
+}
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { lang = b.dataset.lang; try{localStorage.setItem('sp-lang', lang)}catch(e){} applyLang(); }));
+
+/* nav */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('solid', scrollY > 30);
+addEventListener('scroll', onScroll, {passive:true}); onScroll();
+const burger = document.querySelector('.burger'), drawer = document.getElementById('drawer');
+const setDrawer = o => { burger.setAttribute('aria-expanded', o); drawer.classList.toggle('open', o); document.body.style.overflow = o ? 'hidden' : ''; };
+burger.addEventListener('click', () => setDrawer(burger.getAttribute('aria-expanded') !== 'true'));
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
+const links = [...document.querySelectorAll('.links a')];
+const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id)); }), {rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section[id]').forEach(s => spy.observe(s));
+const rv = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); rv.unobserve(e.target); } }), {threshold:.12});
+document.querySelectorAll('.reveal').forEach((el,i) => { el.style.transitionDelay = (i % 3) * 80 + 'ms'; rv.observe(el); });
+
+/* menu */
+function renderMenu(){
+  const box = document.getElementById('items');
+  box.innerHTML = MENU[tab].items.map(([k,p,fav]) => {
+    const [n,d] = t('i.'+k);
+    return `<div class="item"><h3>${n}${fav?`<span class="tag">${t('fav')}</span>`:''}</h3><span class="p">${money(p)}</span><button class="add" type="button" data-k="${k}" aria-label="${t('add').replace('{n}', n)}">+</button><p>${d}</p></div>`;
+  }).join('');
+  box.querySelectorAll('.add').forEach(b => b.addEventListener('click', () => {
+    cart[b.dataset.k] = (cart[b.dataset.k] || 0) + 1;
+    b.classList.add('ok'); b.textContent = '✓';
+    setTimeout(() => { b.classList.remove('ok'); b.textContent = '+'; }, 900);
+    const cb = document.getElementById('cart-open'); cb.classList.remove('bump'); void cb.offsetWidth; cb.classList.add('bump');
+    toast(t('added').replace('{n}', t('i.'+b.dataset.k)[0]));
+    renderCart();
+  }));
+}
+document.querySelectorAll('[role=tab]').forEach(b => b.addEventListener('click', () => {
+  tab = b.dataset.tab;
+  document.querySelectorAll('[role=tab]').forEach(x => x.setAttribute('aria-selected', x === b));
+  const img = document.getElementById('mphoto');
+  img.style.opacity = 0;
+  setTimeout(() => { img.src = IMG(MENU[tab].img); img.onload = () => img.style.opacity = 1; setTimeout(() => img.style.opacity = 1, 400); }, 200);
+  const cap = document.getElementById('mcap'); cap.dataset.i18n = 'menu.cap.' + tab; cap.textContent = t('menu.cap.' + tab);
+  renderMenu();
+}));
+let toastT;
+function toast(msg){ const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 1800); }
+
+/* cart */
+const price = k => { for (const g of Object.values(MENU)) for (const [kk,p] of g.items) if (kk === k) return p; };
+function renderCart(){
+  const lines = document.getElementById('lines'), keys = Object.keys(cart).filter(k => cart[k] > 0);
+  const count = keys.reduce((a,k) => a + cart[k], 0), sum = keys.reduce((a,k) => a + cart[k]*price(k), 0);
+  const badge = document.getElementById('cart-count'); badge.textContent = count; badge.classList.toggle('has', count > 0);
+  document.getElementById('total').textContent = money(sum);
+  lines.innerHTML = keys.length ? keys.map(k => `<div class="line"><b>${t('i.'+k)[0]}</b><span>${money(cart[k]*price(k))}</span><div class="qty"><button type="button" data-q="-1" data-k="${k}" aria-label="−">−</button><span>${cart[k]}</span><button type="button" data-q="1" data-k="${k}" aria-label="+">+</button></div><small>${money(price(k))}</small></div>`).join('')
+    : `<p class="empty">${t('cart.empty')}</p>`;
+  lines.querySelectorAll('[data-q]').forEach(b => b.addEventListener('click', () => { cart[b.dataset.k] += +b.dataset.q; if (cart[b.dataset.k] <= 0) delete cart[b.dataset.k]; renderCart(); }));
+}
+function pickTimes(){
+  document.getElementById('pick-time').innerHTML = [10,15,20,30,45].map(m => `<option value="${m}">${t('cart.in').replace('{m}', m)}</option>`).join('');
+}
+const cartD = document.getElementById('cart');
+function openCart(){ document.getElementById('cart-main').style.display = 'flex'; document.getElementById('cart-done').classList.remove('show'); document.getElementById('cart-err').textContent=''; cartD.showModal(); }
+document.getElementById('cart-open').addEventListener('click', openCart);
+document.getElementById('order-cta').addEventListener('click', () => { if (Object.keys(cart).length) openCart(); else document.getElementById('menu').scrollIntoView(); });
+document.getElementById('cart-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target, err = document.getElementById('cart-err');
+  if (!Object.keys(cart).length){ err.textContent = t('cart.err.empty'); return; }
+  if (!f.name.value.trim()){ err.textContent = t('cart.err.name'); f.name.focus(); return; }
+  document.getElementById('done-text').textContent = t('cart.summary').replace('{n}', f.name.value.trim()).replace('{t}', t('cart.when').replace('{m}', f.time.value));
+  for (const k in cart) delete cart[k];
+  f.reset(); renderCart();
+  document.getElementById('cart-main').style.display = 'none'; document.getElementById('cart-done').classList.add('show');
+});
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+
+/* hours + live status */
+const HOURS = {0:[8.5,17],1:[7,18],2:[7,18],3:[7,18],4:[7,18],5:[7,18],6:[8.5,17]};
+const hm = h => `${String(Math.floor(h)).padStart(2,'0')}:${h%1 ? '30' : '00'}`;
+function renderHours(){
+  const today = new Date().getDay(), body = document.querySelector('#hours tbody'), days = t('days');
+  body.innerHTML = [1,2,3,4,5,6,0].map(d => `<tr class="${d===today?'today':''}"><td data-today="${t('today')}">${days[d]}</td><td>${hm(HOURS[d][0])} – ${hm(HOURS[d][1])}</td></tr>`).join('');
+}
+function status(){
+  const now = new Date(), d = now.getDay(), h = now.getHours() + now.getMinutes()/60, [o,c] = HOURS[d];
+  const el = document.getElementById('status'), tx = document.getElementById('status-text');
+  if (h >= o && h < c){ el.classList.remove('closed'); tx.textContent = t('open').replace('{t}', hm(c)); }
+  else {
+    el.classList.add('closed');
+    const before = h < o, nd = before ? d : (d+1)%7;
+    tx.textContent = t('closed').replace('{d}', before ? t('today') : t('tomorrow')).replace('{t}', hm(HOURS[nd][0]));
+  }
+}
+setInterval(status, 60000);
+
+/* lightbox */
+const lb = document.getElementById('lb');
+document.querySelectorAll('#gal button').forEach(b => b.addEventListener('click', () => {
+  const img = b.querySelector('img'), big = document.getElementById('lb-img');
+  big.src = img.src.replace(/w=\d+/, 'w=1800'); big.alt = img.alt; lb.showModal();
+}));
+
+applyLang();
+</script>
+</body>
+</html>
